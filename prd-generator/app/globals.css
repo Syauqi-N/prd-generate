@@ -1,0 +1,270 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@source "../components/**/*.{ts,tsx}";
+@source "../app/**/*.{ts,tsx}";
+
+/* ── Light mode ─────────────────────────────────────────────── */
+:root {
+  --bg-primary:    #f8f9ff;
+  --bg-secondary:  #ffffff;
+  --bg-card:       rgba(255, 255, 255, 0.6);
+  --border-color:  rgba(148, 163, 184, 0.2);
+  --accent:        #6366f1;
+  --accent-mid:    #8b5cf6;
+  --accent-light:  #a78bfa;
+  --accent-pale:   rgba(99, 102, 241, 0.1);
+  --text-primary:  #0f172a;
+  --text-muted:    #64748b;
+  --text-secondary:#334155;
+  --sidebar-bg:    rgba(255, 255, 255, 0.8);
+  --input-bg:      rgba(255, 255, 255, 0.8);
+  --hover-bg:      rgba(99, 102, 241, 0.06);
+
+  /* Glass */
+  --glass-bg:      rgba(255, 255, 255, 0.55);
+  --glass-border:  rgba(255, 255, 255, 0.7);
+  --glass-shadow:  0 8px 32px rgba(99, 102, 241, 0.12);
+  --glass-blur:    blur(16px);
+
+  /* Blobs */
+  --blob-1:        rgba(99, 102, 241, 0.25);
+  --blob-2:        rgba(139, 92, 246, 0.2);
+  --blob-3:        rgba(236, 72, 153, 0.15);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --gradient-subtle:  linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(139,92,246,0.1) 100%);
+  --gradient-card:    linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 100%);
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+.dark {
+  --bg-primary:    #060612;
+  --bg-secondary:  #0a0a1a;
+  --bg-card:       rgba(15, 15, 35, 0.6);
+  --border-color:  rgba(99, 102, 241, 0.15);
+  --accent:        #818cf8;
+  --accent-mid:    #a78bfa;
+  --accent-light:  #c4b5fd;
+  --accent-pale:   rgba(129, 140, 248, 0.1);
+  --text-primary:  #f1f5f9;
+  --text-muted:    #94a3b8;
+  --text-secondary:#cbd5e1;
+  --sidebar-bg:    rgba(10, 10, 26, 0.85);
+  --input-bg:      rgba(15, 15, 35, 0.8);
+  --hover-bg:      rgba(129, 140, 248, 0.08);
+
+  /* Glass */
+  --glass-bg:      rgba(15, 15, 40, 0.55);
+  --glass-border:  rgba(129, 140, 248, 0.2);
+  --glass-shadow:  0 8px 32px rgba(99, 102, 241, 0.2);
+  --glass-blur:    blur(16px);
+
+  /* Blobs */
+  --blob-1:        rgba(99, 102, 241, 0.35);
+  --blob-2:        rgba(139, 92, 246, 0.3);
+  --blob-3:        rgba(236, 72, 153, 0.2);
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --gradient-subtle:  linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(139,92,246,0.15) 100%);
+  --gradient-card:    linear-gradient(135deg, rgba(15,15,40,0.6) 0%, rgba(15,15,40,0.3) 100%);
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Glass utility ──────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+/* ── Gradient text ──────────────────────────────────────────── */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Gradient button ────────────────────────────────────────── */
+.btn-gradient {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 50%, #f472b6 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.btn-gradient:hover::before {
+  opacity: 1;
+}
+
+.btn-gradient span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Blob animations ────────────────────────────────────────── */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(30px, -50px) scale(1.1); }
+  66%       { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+@keyframes blob2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(-40px, 30px) scale(1.05); }
+  66%       { transform: translate(20px, -30px) scale(0.95); }
+}
+
+@keyframes blob3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, 40px) scale(0.95); }
+  66%       { transform: translate(-30px, -20px) scale(1.1); }
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.blob-1 { background: var(--blob-1); animation: blob  12s ease-in-out infinite; }
+.blob-2 { background: var(--blob-2); animation: blob2 15s ease-in-out infinite; }
+.blob-3 { background: var(--blob-3); animation: blob3 18s ease-in-out infinite; }
+
+/* ── Fade in animations ─────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-up   { animation: fadeUp  0.6s ease-out forwards; }
+.animate-fade-in   { animation: fadeIn  0.4s ease-out forwards; }
+.animate-scale-in  { animation: scaleIn 0.4s ease-out forwards; }
+
+.delay-100 { animation-delay: 0.1s; opacity: 0; }
+.delay-200 { animation-delay: 0.2s; opacity: 0; }
+.delay-300 { animation-delay: 0.3s; opacity: 0; }
+.delay-400 { animation-delay: 0.4s; opacity: 0; }
+
+/* ── Icon float ─────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+.icon-float { animation: float 3s ease-in-out infinite; }
+
+/* ── Placeholder contrast ──────────────────────────────────── */
+::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.dark ::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ── Markdown editor ────────────────────────────────────────── */
+.w-md-editor {
+  border-radius: 12px !important;
+  border: 1px solid var(--border-color) !important;
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-blur) !important;
+  color: var(--text-primary) !important;
+}
+.w-md-editor-toolbar {
+  border-bottom: 1px solid var(--border-color) !important;
+  border-radius: 12px 12px 0 0 !important;
+  background: var(--bg-primary) !important;
+}
+.w-md-editor-text  { color: var(--text-primary) !important; }
+.wmde-markdown {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+/* ── Gradient border ────────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  border-radius: 16px;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: var(--gradient-primary);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.gradient-border:hover::before {
+  opacity: 1;
+}

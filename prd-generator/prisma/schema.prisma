@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  EXPIRED
+  FAILED
+  CANCELLED
+}
+
+enum DocumentStatus {
+  DRAFT
+  GENERATED
+  ARCHIVED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String?
+  email        String        @unique
+  passwordHash String?
+  role         Role          @default(USER)
+  credits      Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  documents    PRDDocument[]
+  invoices     Invoice[]
+  usageLogs    UsageLog[]
+  sessions     Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Plan {
+  id           String    @id @default(cuid())
+  name         String
+  description  String?
+  price        Int
+  creditAmount Int
+  features     Json?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  invoices     Invoice[]
+}
+
+model Invoice {
+  id                String        @id @default(cuid())
+  userId            String
+  planId            String
+  orderId           String        @unique
+  amount            Int
+  status            InvoiceStatus @default(PENDING)
+  paymentProvider   String        @default("PAKASIR")
+  paymentMethod     String?
+  paymentUrl        String?
+  providerReference String?
+  paidAt            DateTime?
+  expiredAt         DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  user              User          @relation(fields: [userId], references: [id])
+  plan              Plan          @relation(fields: [planId], references: [id])
+}
+
+model PRDDocument {
+  id          String         @id @default(cuid())
+  userId      String
+  title       String
+  productName String?
+  productType String?
+  outputStyle String?
+  templateId  String?
+  status      DocumentStatus @default(DRAFT)
+  content     String         @db.Text
+  metadata    Json?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  user        User           @relation(fields: [userId], references: [id])
+  inputs      PRDInput?
+  usageLogs   UsageLog[]
+}
+
+model PRDInput {
+  id          String      @id @default(cuid())
+  documentId  String      @unique
+  idea        String      @db.Text
+  productType String?
+  outputStyle String?
+  targetUsage String?
+  answers     Json?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  document    PRDDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  structure   Json
+  isPremium   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UsageLog {
+  id          String       @id @default(cuid())
+  userId      String
+  documentId  String?
+  action      String
+  creditUsed  Int          @default(0)
+  aiProvider  String?
+  aiModel     String?
+  tokenInput  Int?
+  tokenOutput Int?
+  metadata    Json?
+  createdAt   DateTime     @default(now())
+  user        User         @relation(fields: [userId], references: [id])
+  document    PRDDocument? @relation(fields: [documentId], references: [id])
+}
+
+model PaymentWebhookLog {
+  id          String    @id @default(cuid())
+  provider    String
+  orderId     String?
+  payload     Json
+  status      String
+  processedAt DateTime?
+  createdAt   DateTime  @default(now())
+}
